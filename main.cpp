@@ -44,9 +44,9 @@ public:
 class Gato : public Animal
 {
 public:
-    Gato (string nombr)
+    Gato (string nombre)
     {
-        nombre=nombr;
+        this->nombre=nombre;
     }
 
     void rugir()
@@ -68,9 +68,9 @@ public:
 class Perro : public Animal
 {
 public:
-    Perro (string nombr)
+    Perro (string nombre)
     {
-        nombre=nombr;
+        this->nombre=nombre;
     }
 
     void rugir ()
@@ -92,9 +92,9 @@ public:
 class Lora : public Animal
 {
 public:
-    Lora (string nombr)
+    Lora (string nombre)
     {
-        nombre=nombr;
+        this->nombre=nombre;
     }
 
     void rugir ()
@@ -110,6 +110,67 @@ public:
     string getTipo()
     {
         return "Lora";
+    }
+};
+
+class Lista
+{
+public:
+    Animal*inicio;
+    Animal*sig;
+
+    Lista ()
+    {
+        this->inicio=NULL;
+        this->sig=NULL;
+    }
+
+    void agregarAnimal(Animal*animal)
+    {
+        if (inicio==NULL)
+        {
+            inicio=animal;
+            return ;
+        }
+
+        Animal*temp;
+        for (temp=inicio; temp->sig!=NULL; temp=temp->sig);
+                        temp->sig=animal;
+    }
+
+    void guardarAnimales (char* path)
+    {
+        Animal*temp;
+
+        ofstream out (path);
+        for (temp=inicio; temp->sig!=NULL; temp=temp->sig)
+        {
+            out<<temp->sig->getTipo()<<" "<<temp->sig->getNombre()<<endl;
+        }
+        out.close();
+    }
+
+    void leerAnimales(char* path)
+    {
+        ifstream in(path);
+
+        string str;
+        while (in>>str)
+        {
+            cout<<str<<endl;
+        }
+
+        in.close();
+    }
+
+    void ordenar ()
+    {
+
+    }
+
+    void borrarAnimal(string nombre)
+    {
+
     }
 };
 
