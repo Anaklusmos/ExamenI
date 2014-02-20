@@ -116,8 +116,8 @@ public:
 class Lista
 {
 public:
-    Animal*inicio;
-    Animal*sig;
+    Animal *inicio;
+    Animal *sig;
 
     Lista ()
     {
@@ -125,27 +125,31 @@ public:
         this->sig=NULL;
     }
 
-    void agregarAnimal(Animal*animal)
+    void agregarAnimal(Animal* animal)
     {
         if (inicio==NULL)
         {
             inicio=animal;
-            return ;
-        }
+        }else{
 
-        Animal*temp;
-        for (temp=inicio; temp->sig!=NULL; temp=temp->sig);
-                        temp->sig=animal;
+        Animal *temp;
+        for(temp = inicio; temp->sig!=NULL; temp = temp->sig);
+            temp->sig = animal;
+        }
     }
 
-    void guardarAnimales (char* path)
+    void guardarAnimales(char* path)
     {
-        Animal*temp;
+       if(inicio == NULL)
+            return;
 
-        ofstream out (path);
-        for (temp=inicio; temp->sig!=NULL; temp=temp->sig)
+        ofstream out(path);
+        Animal* temp;
+
+        for(temp = inicio; temp != NULL; temp = temp->sig)
         {
-            out<<temp->sig->getTipo()<<" "<<temp->sig->getNombre()<<endl;
+            out<<temp->getTipo()<<" ";
+            out<<temp->getNombre()<<endl;
         }
         out.close();
     }
@@ -155,9 +159,10 @@ public:
         ifstream in(path);
 
         string str;
-        while (in>>str)
+        string typ;
+        while (in>>typ && in>>str)
         {
-            cout<<str<<endl;
+            cout<<typ<<" "<<str<<endl;
         }
 
         in.close();
@@ -170,12 +175,42 @@ public:
 
     void borrarAnimal(string nombre)
     {
+        if (inicio == NULL)
+            return;
 
+        Animal* temp;
+        if (inicio->nombre==nombre)
+        {
+            temp=inicio->sig;
+            delete inicio;
+            inicio=temp;
+            return;
+        }
+
+        for (temp=inicio; temp->sig!=NULL; temp=temp->sig)
+        {
+            Animal* temp2;
+            if (temp->sig->nombre==nombre)
+            {
+                temp2=temp->sig->sig;
+
+                delete temp->sig;
+                temp->sig=temp2;
+                return ;
+            }
+        }
     }
 };
 
 int main()
 {
-    cout << "Hello world!" << endl;
+    Lista l;
+    l.agregarAnimal(new Gato("ny"));
+    l.agregarAnimal(new Gato("Nye"));
+    l.agregarAnimal(new Perro("Woof"));
+    l.agregarAnimal(new Lora("Poly"));
+
+    l.guardarAnimales("animales.txt");
+    l.leerAnimales("animales.txt");
     return 0;
 }
